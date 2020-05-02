@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Models
 {
-    public class Groups
+    public class Group
     {
-        public long groupId { get; set; }
-        public string groupName { get; set; }
+        public long GroupId { get; set; }
+        public string GroupName { get; set; }
 
     }
 }
