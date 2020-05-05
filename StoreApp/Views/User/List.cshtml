@@ -1,0 +1,14 @@
+﻿@model IEnumerable<User>
+<div>
+    <h3>Список пользователей</h3>
+</div>
+@foreach (var p in Model)
+{
+
+<div>
+    UserId: @p.UserId   <br />
+    Login: @p.UserLogin  <br />
+</div>
+    <div> Дата создания @p.RecordDateTimeStamp</div>
+    <br />
+}

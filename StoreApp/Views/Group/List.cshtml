@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Group>
+    <div>
+        <h3>Список групп</h3>
+    </div>
+    @foreach (var p in Model)
+    {
+
+        <div>
+            GroupId: @p.GroupId   <br />
+            GroupName: @p.GroupName  <br />
+        </div>
+        <div> Дата создания @p.RecordDateTimeStamp</div>
+        <br />
+    }
