@@ -7,17 +7,33 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using StoreApp.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace StoreApp
 {
     public class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+       
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IUserRepository, FakeUserRepository>();
-            services.AddTransient<IGroupRepository, FakeGroupRepository>();
+            services.AddDbContext<StoreContext>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                 .AddCookie(options => //CookieAuthenticationOptions
+                {
+                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                 });
+            services.AddControllersWithViews();
+            
             services.AddMvc();            
         }
 
@@ -35,11 +51,15 @@ namespace StoreApp
             //        template: "{controller=User}/{action=List}/{id?}");
             //});
             app.UseRouting();
+
+            app.UseAuthentication();    // аутентификация
+            app.UseAuthorization();     // авторизация
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=User}/{action=List}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

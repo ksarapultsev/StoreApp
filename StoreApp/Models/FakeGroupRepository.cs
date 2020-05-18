@@ -13,5 +13,7 @@ namespace StoreApp.Models
             new Group { GroupId = 2, Description = "User", GroupName ="user", RecordDateTimeStamp=DateTime.Now}
            
         }.AsQueryable<Group>();
+
+        IQueryable<Group> IGroupRepository.Groups { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

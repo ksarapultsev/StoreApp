@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace StoreApp.Models
@@ -11,9 +12,16 @@ namespace StoreApp.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
 
+                
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {           
-            optionsBuilder.UseSqlite("Filename=StoreDb.sqlite");
+        {
+            optionsBuilder.UseSqlite(@"Data Source=StoreDb.db;");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<Group>().ToTable("Groups");            
         }
     }
 }

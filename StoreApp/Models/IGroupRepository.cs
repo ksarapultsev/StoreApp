@@ -7,6 +7,6 @@ namespace StoreApp.Models
 {
     public interface IGroupRepository
     {
-        IQueryable<Group> Groups { get; }
+        IQueryable<Group> Groups { get; set; }
     }
 }
