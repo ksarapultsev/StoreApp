@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using StoreApp.Models;
 
 namespace StoreApp.Controllers
@@ -75,5 +76,66 @@ namespace StoreApp.Controllers
             await storeContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: Products/Edit/5
+        public async Task<IActionResult> Edit(long? id)
+        {
+            var storeContext = new StoreContext();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var group = await storeContext.Groups.FindAsync(id);
+            if (group == null)
+            {
+                return NotFound();
+            }
+            return View(group);
+        }
+
+        // POST: Products/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(long id, [Bind("GroupId,GroupName,Description")] Group group)
+        {
+            var _context = new StoreContext();
+            group.RecordDateTimeStamp = DateTime.Now;
+            if (id != group.GroupId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(group);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProductExists(group.GroupId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(group);
+        }
+
+        private bool ProductExists(long id)
+        {
+            var _context = new StoreContext();
+            return _context.Groups.Any(e => e.GroupId == id);
+        }
+
     }
 }
