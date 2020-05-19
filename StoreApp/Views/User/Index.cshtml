@@ -8,26 +8,36 @@
             <th>UserId</th>
             <th>UserLogin</th>
             <th>UserName</th>
+            <th>Email</th>
             <th>RecordDateTimeStamp</th>
         </tr>
     </thead>
     <tbody class="col-1">
         @foreach (var p in Model)
         {
-            <tr>
-                <td width="30" style="text-align-last:center">
-                    @p.UserId
-                </td>
-                <td width="10">
-                    @p.UserLogin
-                </td>
-                <td  width="10">
-                    @p.UserName
-                </td>
-                <td width="20">
-                    @p.RecordDateTimeStamp
-                </td>
-            </tr>
+        <tr>
+            <td width="30" style="text-align-last:center">
+                @p.UserId
+            </td>
+            <td width="10">
+                @p.UserLogin
+            </td>
+            <td width="10">
+                @p.UserName
+            </td>
+            
+            <td width="10">
+                @p.Email
+            </td>
+
+            <td width="20">
+                @p.RecordDateTimeStamp
+            </td>
+
+            <td>
+                <a asp-action="Delete" asp-route-id="@p.UserId">Delete</a>
+            </td>
+        </tr>
 
         }
     </tbody>

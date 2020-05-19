@@ -7,6 +7,8 @@ using StoreApp.ViewModels; // пространство имен моделей R
 using StoreApp.Models; // пространство имен UserContext и класса User
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.VisualBasic;
+using System;
 
 namespace StoreApp.Controllers
 {
@@ -28,7 +30,7 @@ namespace StoreApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.UserPassword == model.Password);
+                User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == model.Email || u.UserLogin == model.Email) && u.UserPassword == model.Password);
                 if (user != null)
                 {
                     await Authenticate(model.Email); // аутентификация
@@ -50,11 +52,17 @@ namespace StoreApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email || u.UserLogin == model.UserLogin);
                 if (user == null)
                 {
                     // добавляем пользователя в бд
-                    db.Users.Add(new User { Email = model.Email, UserPassword = model.Password });
+                    db.Users.Add(new User 
+                    { 
+                        Email = model.Email, 
+                        UserPassword = model.Password, 
+                        UserLogin = model.UserLogin, 
+                        UserName = model.UserName, 
+                        RecordDateTimeStamp = DateTime.Now });
                     await db.SaveChangesAsync();
 
                     await Authenticate(model.Email); // аутентификация

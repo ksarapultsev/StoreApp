@@ -33,6 +33,9 @@
                 <td width="20">
                     @p.RecordDateTimeStamp
                 </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@p.GroupId">Delete</a>
+                </td>
             </tr>   
         }
    </tbody>

@@ -42,5 +42,38 @@ namespace StoreApp.Controllers
             }
             return View(group);
         }
+
+
+       
+
+        // GET: Products/Delete/5
+        public async Task<IActionResult> Delete(long? id)
+        {
+            var storeContext = new StoreContext();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product =  storeContext.Groups.FirstOrDefault(m => m.GroupId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+        // POST: Products/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(long id)
+        {
+            var storeContext = new StoreContext();
+            var product = await storeContext.Groups.FindAsync(id);
+            storeContext.Groups.Remove(product);
+            await storeContext.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

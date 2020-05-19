@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace StoreApp.ViewModels
 {
@@ -16,6 +17,10 @@ namespace StoreApp.ViewModels
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Не указан Email")]
-        public string UserName { get; set; }
+        public string UserName { get; set; } 
+        public string UserLogin { get; set; }
+        public string UserPassword { get; set; }
+        
+        public DateTime RecordDateTimeStamp { get; set; }
     }
 }
