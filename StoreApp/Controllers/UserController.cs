@@ -1,4 +1,4 @@
-﻿using StoreApp.Models;
+﻿using StoreApp.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Linq;

@@ -4,17 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using StoreApp.ViewModels; // пространство имен моделей RegisterModel и LoginModel
-using StoreApp.Models; // пространство имен UserContext и класса User
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.VisualBasic;
 using System;
+using StoreApp.Data.Models;
 
 namespace StoreApp.Controllers
 {
     public class AccountController : Controller
     {
-        private StoreContext db;
+
+        private StoreContext db; 
         public AccountController(StoreContext context)
         {
             db = context;

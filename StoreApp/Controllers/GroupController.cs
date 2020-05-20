@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using StoreApp.Models;
+using StoreApp.Data.Models;
 
 namespace StoreApp.Controllers
 {
