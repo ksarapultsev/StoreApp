@@ -2,15 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StoreApp.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
+
         public IActionResult Index()
         {
             var context = new StoreContext();
             var users = context.Users;
+            ViewBag.sessionUserName = HttpContext.Session.GetString("username");
             return View(users);
         }
 

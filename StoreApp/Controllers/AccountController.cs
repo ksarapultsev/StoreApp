@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System;
 using StoreApp.Data.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace StoreApp.Controllers
 {
     public class AccountController : Controller
     {
-
         private StoreContext db; 
         public AccountController(StoreContext context)
         {
@@ -21,7 +21,7 @@ namespace StoreApp.Controllers
         }
         [HttpGet]
         public IActionResult Login()
-        {
+        {            
             return View();
         }
         [HttpPost]
@@ -33,8 +33,9 @@ namespace StoreApp.Controllers
                 User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == model.Email || u.UserLogin == model.Email) && u.UserPassword == model.Password);
                 if (user != null)
                 {
-                    await Authenticate(model.Email); // аутентификация
 
+                    await Authenticate(model.Email); // аутентификация
+                    HttpContext.Session.SetString("username", user.UserName);                    
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
@@ -66,7 +67,7 @@ namespace StoreApp.Controllers
                     await db.SaveChangesAsync();
 
                     await Authenticate(model.Email); // аутентификация
-
+                    HttpContext.Session.SetString("username", model.UserName);
                     return RedirectToAction("Index", "Home");
                 }
                 else

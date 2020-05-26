@@ -33,6 +33,8 @@ namespace StoreApp
                      options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                  });
             services.AddControllersWithViews();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
             
             services.AddMvc();            
         }
@@ -43,6 +45,8 @@ namespace StoreApp
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
             app.UseStaticFiles();
+
+            app.UseSession();
 
             //app.UseMvc(roures =>
             //{

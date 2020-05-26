@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +13,15 @@ using StoreApp.Data.Models;
 
 namespace StoreApp.Controllers
 {
+    [Authorize]
     public class GroupController : Controller
     {
+
         public IActionResult Index()
         {
             var context = new StoreContext();
             var category = context.Groups;
+            ViewBag.sessionUserName = HttpContext.Session.GetString("username");
             return View(category);
         }
 
