@@ -1,25 +1,25 @@
-﻿@{ 
+﻿@{
     Layout = "_LayoutAccount";
 }
 @model StoreApp.ViewModels.RegisterModel
 
 <h2 class="m-4">Регистрация</h2>
 
-<form asp-action="Register" asp-controller="Account" asp-anti-forgery="true" class="m-4" >
-    <div class="validation" asp-validation-summary="ModelOnly" />
-    <div>
+<form asp-action="Register" asp-controller="Account" asp-anti-forgery="true" class="m-4">
+
+    <div class="w-auto">
         <div class="form-group">
-            <label asp-for="UserName">Введите Name</label><br />
+            <label asp-for="UserName">Введите имя</label><br />
             <input type="text" asp-for="UserName" />
             <span asp-validation-for="UserName" />
         </div>
         <div class="form-group">
-            <label asp-for="UserLogin">Введите Login</label><br />
+            <label asp-for="UserLogin">Введите логин</label><br />
             <input type="text" asp-for="UserLogin" />
             <span asp-validation-for="UserLogin" />
         </div>
         <div class="form-group">
-            <label asp-for="Email">Введите Email</label><br />
+            <label asp-for="Email">Введите email</label><br />
             <input type="text" asp-for="Email" />
             <span asp-validation-for="Email" />
         </div>
@@ -33,9 +33,16 @@
             <input asp-for="ConfirmPassword" />
             <span asp-validation-for="ConfirmPassword" />
         </div>
-
-        <div class="form-group">
-            <input type="submit" value="Зарегистрироваться" class="btn btn-primary" />
-        </div>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+    </div>
+   
+    <div class="form-group">
+        <input type="submit" value="Зарегистрироваться" class="btn btn-primary" />
     </div>
 </form>
+
+@section Scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/src/jquery.validate.unobtrusive.js"></script>
+}

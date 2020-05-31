@@ -5,25 +5,31 @@
     <title>StoreApp</title>
 
     @*<link asp-href-include="lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />*@
-   
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
 
 </head>
 <body>
-    <div class="text-right">        
-            Добро пожаловать
+    <div class="text-right">
+        Добро пожаловать
         <label>@ViewBag.sessionUserName</label>
-        
-        <a class="text-right m-4" href="~/Account/logout">Выход</a>
-    </div> 
 
-   
+        <a class="text-right m-4" href="~/Account/logout">Выход</a>
+    </div>
+
+
     <div>
         @RenderBody()
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    @*<script src="~/lib/jquery/dist/jquery.slim.min.js"></script>*@
+
+ 
 
 </body>
 </html>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script><!--подключение jquery-->
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+@*<script src="~/js/site.js" asp-append-version="true"></script>*@
+@RenderSection("Scripts", required: false)

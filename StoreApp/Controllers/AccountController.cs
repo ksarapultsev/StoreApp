@@ -63,7 +63,8 @@ namespace StoreApp.Controllers
                         UserPassword = model.Password, 
                         UserLogin = model.UserLogin, 
                         UserName = model.UserName, 
-                        RecordDateTimeStamp = DateTime.Now });
+                        RecordDateTimeStamp = DateTime.Now 
+                    });
                     await db.SaveChangesAsync();
 
                     await Authenticate(model.Email); // аутентификация
@@ -71,7 +72,7 @@ namespace StoreApp.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 else
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                    ModelState.AddModelError("", "Пользователь с такими данными уже зарегистрирован в базе данных");
             }
             return View(model);
         }

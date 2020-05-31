@@ -2,8 +2,10 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>StoreApp</title>   
-     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    <title>StoreApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="~/css/errors.css">
+
 </head>
 <body>
 
@@ -14,3 +16,9 @@
 
 </body>
 </html>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script><!--подключение jquery-->
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+@*<script src="~/js/site.js" asp-append-version="true"></script>*@
+@RenderSection("Scripts", required: false)

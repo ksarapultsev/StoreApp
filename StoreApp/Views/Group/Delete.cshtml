@@ -4,30 +4,36 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Удаление</h1>
+<h3 class="m-4">Удаление</h3>
 
-<h3>Вы действительно хотите удалить этот элемент?</h3>
+<h4 class="m-3">Вы действительно хотите удалить этот элемент?</h4>
 <div>
     
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.GroupName)
+    <dl class="row m-1">
+        <dt class="col-sm-3">
+            <label asp-for="GroupName" class="control-label">Наименование группы</label>            
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.GroupName)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+        <dt class="col-sm-3">
+            <label asp-for="Description" class="control-label">Наименование описания</label>
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
+        <dt class="col-sm-3">
+            <label asp-for="RecordDateTimeStamp" class="control-label">Дата создания</label>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RecordDateTimeStamp)
+        </dd>
     </dl>
 
-    <form asp-action="Delete">
+    <form asp-action="Delete" class="m-3">
         <input type="hidden" asp-for="GroupId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-action="Index">Вернуться назад</a>
     </form>
 </div>

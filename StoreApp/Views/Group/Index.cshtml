@@ -1,14 +1,12 @@
 ﻿@model IEnumerable<Group>
 <div>
-    <h3>Список групп</h3>
+    <h3 class="m-3">Список групп</h3>
 </div>
-
-
 <p>
-    <a asp-action="Create" asp-controller="Group" method="post">Создать новую группу</a>
+    <a class="m-3" asp-action="Create" asp-controller="Group" method="post">Создать новую группу</a>
 </p>
 
-<table class="table table-sm table-bordered col-1">
+<table class="table table-sm table-bordered col-1 m-2">
     <thead class="bg-primary text-white text-center">
         <tr>
             <th>GroupId</th>
@@ -34,10 +32,10 @@
                     @p.RecordDateTimeStamp
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@p.GroupId">Edit</a>                    
+                    <a asp-action="Edit" asp-route-id="@p.GroupId">Редактировать</a>                    
                 </td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@p.GroupId">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@p.GroupId">Удалить</a>
                 </td>
             </tr>   
         }

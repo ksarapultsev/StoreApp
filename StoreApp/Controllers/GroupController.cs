@@ -16,11 +16,15 @@ namespace StoreApp.Controllers
     [Authorize]
     public class GroupController : Controller
     {
+        private StoreContext db;
+        public GroupController(StoreContext context)
+        {
+            db = context;
+        }
 
         public IActionResult Index()
-        {
-            var context = new StoreContext();
-            var category = context.Groups;
+        {           
+            var category = db.Groups;
             ViewBag.sessionUserName = HttpContext.Session.GetString("username");
             return View(category);
         }
@@ -38,13 +42,17 @@ namespace StoreApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([Bind("GroupName, Description, RecordDateTimeStamp ")] Group group)
         {
-            group.RecordDateTimeStamp = DateTime.Now;
-            var storeContext = new StoreContext();
             if (ModelState.IsValid)
             {
-                storeContext.Add(group);
-                await storeContext.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Group usergroup = await db.Groups.FirstOrDefaultAsync(u => u.GroupName.ToLower() == group.GroupName.ToLower());
+                if (usergroup == null)
+                {
+                    group.RecordDateTimeStamp = DateTime.Now;
+                    db.Add(group);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else ModelState.AddModelError("", "Такая группа уже зарегистрирована в базе данных");
             }
             return View(group);
         }
@@ -55,19 +63,19 @@ namespace StoreApp.Controllers
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
-            var storeContext = new StoreContext();
+          
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product =  storeContext.Groups.FirstOrDefault(m => m.GroupId == id);
+            var product =  db.Groups.FirstOrDefault(m => m.GroupId == id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return  View(product);
         }
 
         // POST: Products/Delete/5
@@ -75,23 +83,23 @@ namespace StoreApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var storeContext = new StoreContext();
-            var product = await storeContext.Groups.FindAsync(id);
-            storeContext.Groups.Remove(product);
-            await storeContext.SaveChangesAsync();
+          
+            var product = await db.Groups.FindAsync(id);
+            db.Groups.Remove(product);
+            await db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
-            var storeContext = new StoreContext();
+            
             if (id == null)
             {
                 return NotFound();
             }
 
-            var group = await storeContext.Groups.FindAsync(id);
+            var group = await db.Groups.FindAsync(id);
             if (group == null)
             {
                 return NotFound();
@@ -106,7 +114,7 @@ namespace StoreApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("GroupId,GroupName,Description")] Group group)
         {
-            var _context = new StoreContext();
+           
             group.RecordDateTimeStamp = DateTime.Now;
             if (id != group.GroupId)
             {
@@ -115,31 +123,41 @@ namespace StoreApp.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+
+                Group usergroup = await db.Groups.FirstOrDefaultAsync(u => u.GroupName.ToLower() == group.GroupName.ToLower());
+                if (usergroup == null)
                 {
-                    _context.Update(group);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(group.GroupId))
+                    try
                     {
-                        return NotFound();
+                        db.Update(group);
+                        await db.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!ProductExists(group.GroupId))
+                            {
+                                return NotFound();
+                            }
+                        else
+                            {
+                                throw;
+                            }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                else ModelState.AddModelError("", "Такая группа уже зарегистрирована в базе данных");
+
+
+
+                
             }
             return View(group);
         }
 
         private bool ProductExists(long id)
         {
-            var _context = new StoreContext();
-            return _context.Groups.Any(e => e.GroupId == id);
+          
+            return db.Groups.Any(e => e.GroupId == id);
         }
 
     }
