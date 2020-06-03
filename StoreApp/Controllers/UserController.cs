@@ -4,30 +4,34 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace StoreApp.Controllers
 {
     [Authorize]
     public class UserController : Controller
     {
+        private StoreContext db;
+        public UserController(StoreContext context)
+        {
+            db = context;
+        }
 
         public IActionResult Index()
-        {
-            var context = new StoreContext();
-            var users = context.Users;
+        {            
+            var users = db.Users;
             ViewBag.sessionUserName = HttpContext.Session.GetString("username");
             return View(users);
         }
 
         public async Task<IActionResult> Delete(long? id)
-        {
-            var storeContext = new StoreContext();
+        {            
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = storeContext.Users.FirstOrDefault(m => m.UserId == id);
+            var product = await db.Users.FirstOrDefaultAsync(m => m.UserId == id);
             if (product == null)
             {
                 return NotFound();
@@ -40,11 +44,10 @@ namespace StoreApp.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
-        {
-            var storeContext = new StoreContext();
-            var product = await storeContext.Users.FindAsync(id);
-            storeContext.Users.Remove(product);
-            await storeContext.SaveChangesAsync();
+        {            
+            var product = await db.Users.FindAsync(id);
+            db.Users.Remove(product);
+            await db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
     }

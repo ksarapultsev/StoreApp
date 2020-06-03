@@ -69,7 +69,7 @@ namespace StoreApp.Controllers
                 return NotFound();
             }
 
-            var product =  db.Groups.FirstOrDefault(m => m.GroupId == id);
+            var product = await db.Groups.FirstOrDefaultAsync(m => m.GroupId == id);
             if (product == null)
             {
                 return NotFound();
