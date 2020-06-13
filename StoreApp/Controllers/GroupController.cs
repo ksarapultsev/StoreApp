@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using StoreApp.Data.Models;
 
 namespace StoreApp.Controllers
@@ -16,9 +17,11 @@ namespace StoreApp.Controllers
     [Authorize]
     public class GroupController : Controller
     {
+        private readonly ILogger _logger;
         private StoreContext db;
-        public GroupController(StoreContext context)
+        public GroupController(StoreContext context, ILogger<GroupController> logger)
         {
+            _logger = logger;
             db = context;
         }
 
@@ -26,6 +29,7 @@ namespace StoreApp.Controllers
         {           
             var category = db.Groups;
             ViewBag.sessionUserName = HttpContext.Session.GetString("username");
+            _logger.LogInformation("Просмотрена страница групп пользователем <<{0}>>", HttpContext.Session.GetString("userLogin"));
             return View(category);
         }
 
@@ -52,7 +56,12 @@ namespace StoreApp.Controllers
                     await db.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-                else ModelState.AddModelError("", "Такая группа уже зарегистрирована в базе данных");
+                else
+                {
+                    ModelState.AddModelError("", "Такая группа уже зарегистрирована в базе данных");
+                    _logger.LogError("Такая группа {0} уже зарегистрирована в базе данных", group.GroupName);
+                }
+                    
             }
             return View(group);
         }

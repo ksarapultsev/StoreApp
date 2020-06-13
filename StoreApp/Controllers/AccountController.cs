@@ -9,19 +9,23 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System;
 using StoreApp.Data.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace StoreApp.Controllers
 {
     public class AccountController : Controller
     {
-        private StoreContext db; 
-        public AccountController(StoreContext context)
+        private StoreContext db;
+        private readonly ILogger _logger;
+        public AccountController(StoreContext context, ILogger<AccountController> logger)
         {
             db = context;
+            _logger = logger;
         }
         [HttpGet]
         public IActionResult Login()
-        {            
+        {           
             return View();
         }
         [HttpPost]
@@ -35,7 +39,9 @@ namespace StoreApp.Controllers
                 {
 
                     await Authenticate(model.Email); // аутентификация
-                    HttpContext.Session.SetString("username", user.UserName);                    
+                    HttpContext.Session.SetString("username", user.UserName);
+                    HttpContext.Session.SetString("userLogin", user.UserLogin);
+                    _logger.LogInformation("Пользователь c логином {0} авторизовался успешно", user.UserLogin);
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
@@ -69,6 +75,7 @@ namespace StoreApp.Controllers
 
                     await Authenticate(model.Email); // аутентификация
                     HttpContext.Session.SetString("username", model.UserName);
+                    HttpContext.Session.SetString("userLogin", user.UserLogin);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -93,6 +100,9 @@ namespace StoreApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            _logger.LogInformation("Пользователь {0} вышел", HttpContext.Session.GetString("userLogin"));
+            HttpContext.Session.SetString("username", "");
+            HttpContext.Session.SetString("userLogin", "");
             return RedirectToAction("Login", "Account");
         }
     }
