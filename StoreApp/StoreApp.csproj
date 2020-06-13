@@ -29,4 +29,10 @@
     <ProjectReference Include="..\StoreApp.Data\StoreApp.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Database\StoreDb.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
